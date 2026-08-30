@@ -26,40 +26,56 @@ AI 도움 없이 직접 코드를 작성하며 레이아웃 구조를 이해하�
 | 현지   | Progress Bar |
 | 현주   | Area Chart   |
 
-📁 폴더 컨벤션
+## 📁 폴더 컨벤션
+
+```
 components/
-├── ui/ ← shadcn 기본 컴포넌트 (CLI로 자동 생성, 직접 수정 지양)
-│ ├── table.tsx
-│ ├── sidebar.tsx
-│ └── ...
-├── common/ ← 여러 담당 컴포넌트가 공유하는 것들 (로딩, 빈 상태 등)
-│ ├── PageHeader.tsx
-│ └── EmptyState.tsx
-└── dashboard/ ← 담당별 기능 컴포넌트 전부 (shadcn ui/와 이름 겹쳐도 경로로 구분됨)
-├── sidebar/
-│ └── Sidebar.tsx
-├── table/
-│ ├── index.ts
-│ ├── Table.tsx
-│ ├── TableHeader.tsx
-│ ├── TableRow.tsx
-│ └── TableEmpty.tsx
-├── area-chart/
-├── bar-chart/
-├── pie-chart/
-└── progress-bar/
+  ui/                 (shadcn 기본 컴포넌트 - CLI로 자동 생성, 직접 수정 지양)
+    table.tsx
+    sidebar.tsx
+    ...
+
+  common/              (여러 담당 컴포넌트가 공유하는 것들 - 로딩, 빈 상태 등)
+    PageHeader.tsx
+    EmptyState.tsx
+
+  dashboard/            (담당별 기능 컴포넌트 전부 - shadcn ui/와 이름 겹쳐도 경로로 구분됨)
+    sidebar/
+      Sidebar.tsx
+    table/
+      index.ts
+      Table.tsx
+      TableHeader.tsx
+      TableRow.tsx
+      TableEmpty.tsx
+    bar-chart/
+    pie-chart/
+    progress-bar/
+    area-chart/
+```
+
+**규칙**
+
+- `ui/`는 shadcn CLI가 생성하는 원자 단위 컴포넌트 전용 — 직접 새 파일 추가하지 않기
+- 담당 기능 컴포넌트는 전부 `dashboard/` 하위에 kebab-case 폴더로 생성
+- 여러 담당 컴포넌트에서 공통으로 쓰는 요소는 `common/`에 배치
+- 폴더 내부가 여러 파일로 나뉘는 경우, `index.ts`에서 export 진입점을 통일
+  ```ts
+  export { Table } from "./Table";
+  ```
+  → 사용할 때는 `import { Table } from "@/components/dashboard/table"`
 
 ## 🌿 브랜치 전략
 
 ```
 main
- └─ dev
-     ├─ feature/sidebar
-     ├─ feature/table
-     ├─ feature/bar-chart
-     ├─ feature/pie-chart
-     ├─ feature/area-chart
-     └─ feature/progress-bar
+  dev
+    feature/sidebar
+    feature/table
+    feature/bar-chart
+    feature/pie-chart
+    feature/progress-bar
+    feature/area-chart
 ```
 
 1. 각자 담당 컴포넌트 기준으로 `feature/컴포넌트명` 브랜치 생성
