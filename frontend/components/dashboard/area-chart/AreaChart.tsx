@@ -1,7 +1,7 @@
-export default function PieChart() {
+export default function AreaChart() {
   return (
     <div className="border rounded-xl flex flex-1 items-center justify-center">
-      <p>PieChart</p>
+      <p>AreaChart</p>
     </div>
   );
 }
