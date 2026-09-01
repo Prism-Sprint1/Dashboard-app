@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/table"
 
 import { data } from "@/lib/mockData"
+import { exportToCsv } from "@/lib/exportCsv"
 
 const columns = [
   [Hash, "ORDER ID"],
@@ -79,6 +80,28 @@ export default function OrderTable() {
             ]),
           ]
     )
+
+  const handleExportCsv = () => {
+    // 선택된 행이 있으면 선택된 것만, 없으면 현재 검색 필터가 적용된 전체를 내보냄
+    const rowsToExport =
+      selected.length > 0
+        ? visibleTransactions.filter((t) => selected.includes(t.id))
+        : visibleTransactions
+
+    const csvRows = rowsToExport.map((t) => ({
+      "Order ID": t.id,
+      Product: t.product,
+      Detail: t.detail,
+      Price: t.price,
+      Customer: t.customer,
+      "Date Checkout": t.date,
+      "Payment Method": t.method,
+      Card: `**** ${t.card}`,
+      Email: t.email,
+    }))
+
+    exportToCsv(csvRows, `transactions_${Date.now()}.csv`)
+  }
 
   return (
     <section className="border-bd-black w-full rounded-2xl border p-4 shadow-[0_12px_40px_rgba(25,28,27,0.04)] md:p-6">
@@ -139,7 +162,9 @@ export default function OrderTable() {
               }
             />
             <DropdownMenuContent align="end" className="w-36">
-              <DropdownMenuItem>Export CSV</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleExportCsv}>
+                Export CSV
+              </DropdownMenuItem>
               <DropdownMenuItem>Export PDF</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
