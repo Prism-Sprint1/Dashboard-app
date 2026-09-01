@@ -2,141 +2,105 @@
 
 import * as React from "react"
 
-import { AudioWaveform, BookOpen, Bot, Command, Frame, GalleryVerticalEnd, Map, PieChart, Settings2, SquareTerminal } from "lucide-react"
+import { BarChart3, CreditCard, GalleryVerticalEnd, House, LayoutDashboard, Package, ReceiptText, ShoppingCart, Star, Tags, Users } from "lucide-react"
 
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 
 import { NavMain } from "@/components/dashboard/sidebar/NavMain"
-import { NavProjects } from "@/components/dashboard/sidebar/NavProjects"
 import { NavUser } from "@/components/dashboard/sidebar/NavUser"
 import { TeamSwitcher } from "@/components/dashboard/sidebar/TeamSwitcher"
 
-// This is sample data.
+// 사이드바 데이터
 const data = {
+  // 하단 유저 데이터
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Nathan Scott",
+    email: "scott@example.com",
+    avatar: "",
   },
+  // 상단 팀 데이터
   teams: [
     {
-      name: "Acme Inc",
+      name: "Quantico",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      plan: "ID: CMP-1006",
     },
   ],
+  // 메인 네비게이션
   navMain: [
     {
-      title: "Playground",
+      title: "Home",
       url: "#",
-      icon: SquareTerminal,
+      icon: House,
+    },
+    {
+      title: "Dashboard",
+      url: "#",
+      icon: LayoutDashboard,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Analytics",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Sales Overview",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Top Products",
+          url: "#",
+        },
+        {
+          title: "Stock Status",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Analytics",
       url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      icon: BarChart3,
     },
     {
-      title: "Documentation",
+      title: "Products",
       url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      icon: Package,
     },
     {
-      title: "Settings",
+      title: "Categories",
       url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      icon: Tags,
     },
     {
-      name: "Sales & Marketing",
+      title: "Orders",
       url: "#",
-      icon: PieChart,
+      icon: ShoppingCart,
     },
     {
-      name: "Travel",
+      title: "Taxes",
       url: "#",
-      icon: Map,
+      icon: ReceiptText,
+    },
+    {
+      title: "Analytics",
+      url: "#",
+      icon: BarChart3,
+    },
+    {
+      title: "Customers",
+      url: "#",
+      icon: Users,
+    },
+    {
+      title: "Reviews",
+      url: "#",
+      icon: Star,
+    },
+    {
+      title: "Payments",
+      url: "#",
+      icon: CreditCard,
     },
   ],
 }
@@ -149,7 +113,6 @@ export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sid
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
