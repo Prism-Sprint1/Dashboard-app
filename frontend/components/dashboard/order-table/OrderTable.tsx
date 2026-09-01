@@ -2,18 +2,7 @@
 
 import * as React from "react"
 
-import {
-  CalendarDays,
-  CreditCard,
-  Download,
-  EyeOff,
-  Hash,
-  Mail,
-  Search,
-  SlidersHorizontal,
-  UserRound,
-  X,
-} from "lucide-react"
+import { Download, EyeOff, Search, X, SlidersHorizontal } from "lucide-react"
 
 import Image from "next/image"
 
@@ -36,16 +25,9 @@ import {
 
 import { data } from "@/lib/mockData"
 import { exportToCsv } from "@/lib/exportCsv"
+import { tableColumns } from "./table.constants"
 
-const columns = [
-  [Hash, "ORDER ID"],
-  [SlidersHorizontal, "PRODUCT ITEM"],
-  [CreditCard, "PRICE"],
-  [UserRound, "CUSTOMER"],
-  [CalendarDays, "DATE CHECKOUT"],
-  [CreditCard, "PAYMENT METHOD"],
-  [Mail, "EMAIL"],
-] as const
+const columns = tableColumns
 
 export default function OrderTable() {
   const [selected, setSelected] = React.useState<string[]>([])
