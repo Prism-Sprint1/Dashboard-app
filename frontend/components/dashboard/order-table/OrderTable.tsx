@@ -46,7 +46,7 @@ const columns = [
   [Mail, "EMAIL"],
 ] as const
 
-export default function Table() {
+export default function OrderTable() {
   const [selected, setSelected] = React.useState<string[]>([])
   const [query, setQuery] = React.useState("")
   const visibleTransactions = data.transactions.filter((transaction) =>

@@ -4,7 +4,7 @@ import AreaChart from "@/components/dashboard/area-chart/AreaChart"
 import PieChart from "@/components/dashboard/pie-chart/PieChart"
 import BarChart from "@/components/dashboard/bar-chart/BarChart"
 import ProgressBar from "@/components/dashboard/progress-bar/ProgressBar"
-import Table from "@/components/dashboard/table/NodeTable"
+import OrderTable from "@/components/dashboard/order-table/OrderTable"
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
@@ -29,7 +29,7 @@ export default function Home() {
             {/* progress bar */}
             <ProgressBar />
           </section>
-          <Table />
+          <OrderTable />
         </div>
       </SidebarInset>
     </SidebarProvider>
