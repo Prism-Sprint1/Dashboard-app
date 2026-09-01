@@ -2,13 +2,14 @@
 
 import * as React from "react"
 
-import { BarChart3, CreditCard, GalleryVerticalEnd, House, LayoutDashboard, Package, ReceiptText, ShoppingCart, Star, Tags, Users } from "lucide-react"
+import { BarChart3, Blocks, CreditCard, House, LayoutDashboard, Package, ReceiptText, Search, ShoppingCart, Star, Tags, Users } from "lucide-react"
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarTrigger } from "@/components/ui/sidebar"
 
 import { NavMain } from "@/components/dashboard/sidebar/NavMain"
 import { NavUser } from "@/components/dashboard/sidebar/NavUser"
 import { TeamSwitcher } from "@/components/dashboard/sidebar/TeamSwitcher"
+import { SidebarCard } from "@/components/dashboard/sidebar/SidebarCard"
 
 // 사이드바 데이터
 const data = {
@@ -22,7 +23,7 @@ const data = {
   teams: [
     {
       name: "Quantico",
-      logo: GalleryVerticalEnd,
+      logo: Blocks,
       plan: "ID: CMP-1006",
     },
   ],
@@ -37,7 +38,6 @@ const data = {
       title: "Dashboard",
       url: "#",
       icon: LayoutDashboard,
-      isActive: true,
       items: [
         {
           title: "Analytics",
@@ -83,11 +83,6 @@ const data = {
       icon: ReceiptText,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: BarChart3,
-    },
-    {
       title: "Customers",
       url: "#",
       icon: Users,
@@ -108,15 +103,36 @@ const data = {
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
+      {/* 사이드바 헤더 */}
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <div className="flex items-center group-data-[collapsible=icon]:flex-col">
+          <div className="min-w-0 flex-1 group-data-[collapsible=icon]:flex-none">
+            <TeamSwitcher teams={data.teams} />
+          </div>
+          {/* 검색 및 사이드바 여닫기 */}
+          <div className="flex items-center group-data-[collapsible=icon]:flex-col">
+            <button
+              type="button"
+              className="flex size-8 items-center justify-center text-muted-foreground hover:text-foreground group-data-[collapsible=icon]:hidden"
+            >
+              <Search className="size-4" />
+            </button>
+            <SidebarTrigger className="size-8 text-muted-foreground hover:text-foreground" />
+          </div>
+        </div>
       </SidebarHeader>
+
+      {/* 사이드바 메뉴 */}
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
+
+      {/* 사이드바 푸터 */}
       <SidebarFooter>
+        <SidebarCard />
         <NavUser user={data.user} />
       </SidebarFooter>
+      {/* 사이드바 여닫이 */}
       <SidebarRail />
     </Sidebar>
   )
