@@ -1,4 +1,6 @@
-export const data = {
+import type { Transaction } from "@/lib/types"
+
+export const data: { transactions: Transaction[] } = {
   transactions: [
     {
       id: "AR-47380416-61",
