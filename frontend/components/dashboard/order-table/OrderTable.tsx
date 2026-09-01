@@ -6,22 +6,20 @@ import { Download, EyeOff, Search, X, SlidersHorizontal } from "lucide-react"
 
 import Image from "next/image"
 
-import { Button } from "@/components/ui/button"
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
+  Input,
   Table as ShadcnTable,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui"
 
 import { data } from "@/lib/mockData"
 import { exportToCsv } from "@/lib/exportCsv"
