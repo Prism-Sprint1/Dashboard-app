@@ -1,7 +1,7 @@
 // 어케 놓을지
 "use client"
 
-import { AreaChart } from "./AreaChart"
+import AreaChart from "./AreaChart"
 import { areaChartData } from "./data"
 
 export function AreaChartList() {
