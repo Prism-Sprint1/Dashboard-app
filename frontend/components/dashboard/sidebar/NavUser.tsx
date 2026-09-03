@@ -25,17 +25,17 @@ export function NavUser({
             render={
               <SidebarMenuButton
                 size="lg"
-                className="h-auto px-2 py-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                className="h-auto px-2 py-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:p-0"
               />
             }
           >
             {/* 유저 프로필 이미지 */}
             <div className="relative shrink-0">
-              <Avatar className="size-9 rounded-full">
+              <Avatar className="size-9 rounded-full group-data-[collapsible=icon]:size-8">
                 <AvatarImage src={user.avatar} alt={user.name} />
                 <AvatarFallback>NS</AvatarFallback>
               </Avatar>
-              <span className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-sidebar bg-green-500" />
+              <span className="absolute right-0 bottom-0 size-3 rounded-full border-2 border-sidebar bg-green-500 group-data-[collapsible=icon]:size-2.5" />
             </div>
 
             {/* 유저 정보 */}

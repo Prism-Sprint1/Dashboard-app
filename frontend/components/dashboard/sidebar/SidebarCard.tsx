@@ -33,7 +33,7 @@ export function SidebarCard() {
           </Avatar>
         </AvatarGroup>
         {/* 닫기 버튼 */}
-        <Button variant="ghost" size="icon" onClick={() => setIsVisible(false)} className="size-6 text-muted-foreground hover:text-foreground" >
+        <Button variant="ghost" size="icon" onClick={() => setIsVisible(false)} className="size-6 text-muted-foreground hover:text-foreground">
           <X className="size-3.5" />
         </Button>
       </div>
