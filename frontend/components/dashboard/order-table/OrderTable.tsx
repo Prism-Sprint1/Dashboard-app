@@ -26,8 +26,7 @@ import { exportToCsv } from "@/lib/exportCsv"
 import { exportToPdf } from "@/lib/exportPdf"
 import { tableColumns } from "./table.constants"
 
-import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"
+import defaultImage from "@/public/product-placeholder.svg"
 
 const columns = tableColumns
 
@@ -98,17 +97,14 @@ export default function OrderTable() {
 
   return (
     <section className="border-bd-black w-full rounded-2xl border p-4 shadow-[0_12px_40px_rgba(25,28,27,0.04)] md:p-6">
-      <div className="mb-6 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
+      <div className="mb-3 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
         <div>
           <h1 className="flex items-center gap-2 text-xl font-semibold tracking-[-0.02em]">
             Recent Transaction
-            <span className="min-w-5 rounded-lg bg-[#23272A] px-1 text-center text-sm font-normal text-[#696D72]">
+            <span className="min-w-5 rounded-lg bg-neutral-800 px-1 text-center text-sm font-normal text-neutral-500">
               {data.transactions.length}
             </span>
           </h1>
-          <p className="mt-1 text-sm text-[#8b928d]">
-            Monitor your latest orders and payment activity.
-          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative w-full sm:w-56">
@@ -218,8 +214,8 @@ export default function OrderTable() {
                       <Image
                         width={40}
                         height={40}
-                        src={transaction.image ? transaction.image : ""}
-                        alt=""
+                        src={transaction.image || defaultImage}
+                        alt={transaction.product}
                         className="size-10 rounded-lg object-cover"
                       />
                       <div>
@@ -253,11 +249,19 @@ export default function OrderTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`text-xs font-bold italic ${transaction.method === "VISA" ? "text-[#3157a6]" : "text-[#c35a45]"}`}
-                      >
-                        {transaction.method}
-                      </span>
+                      <Image
+                        width={36}
+                        height={24}
+                        src={
+                          transaction.method === "VISA"
+                            ? "/visa.svg"
+                            : "/mastercard.svg"
+                        }
+                        alt={
+                          transaction.method === "VISA" ? "Visa" : "Mastercard"
+                        }
+                        className="h-6 w-9 rounded-[3px] object-contain"
+                      />
                       <span className="text-sm text-[#aaa]">
                         **** {transaction.card}
                       </span>
