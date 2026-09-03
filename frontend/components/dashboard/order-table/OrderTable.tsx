@@ -23,7 +23,11 @@ import {
 
 import { data } from "@/lib/mockData"
 import { exportToCsv } from "@/lib/exportCsv"
+import { exportToPdf } from "@/lib/exportPdf"
 import { tableColumns } from "./table.constants"
+
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 
 const columns = tableColumns
 
@@ -81,6 +85,15 @@ export default function OrderTable() {
     }))
 
     exportToCsv(csvRows, `transactions_${Date.now()}.csv`)
+  }
+
+  const handlerExportPdf = () => {
+    const rowsToExport =
+      selected.length > 0
+        ? visibleTransactions.filter((t) => selected.includes(t.id))
+        : visibleTransactions
+
+    exportToPdf(rowsToExport, `transactions_${Date.now()}.pdf`)
   }
 
   return (
@@ -145,7 +158,9 @@ export default function OrderTable() {
               <DropdownMenuItem onClick={handleExportCsv}>
                 Export CSV
               </DropdownMenuItem>
-              <DropdownMenuItem>Export PDF</DropdownMenuItem>
+              <DropdownMenuItem onClick={handlerExportPdf}>
+                Export PDF
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
