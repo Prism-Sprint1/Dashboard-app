@@ -2,13 +2,13 @@
 
 import * as React from "react"
 
-import { BarChart3, Blocks, CreditCard, House, LayoutDashboard, Package, ReceiptText, Search, ShoppingCart, Star, Tags, Users } from "lucide-react"
+import { BarChart3, CreditCard, House, LayoutDashboard, Package, ReceiptText, ShoppingCart, Star, Tags, Users } from "lucide-react"
 
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail, SidebarTrigger } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar"
 
+import { AppSidebarHeader } from "@/components/dashboard/sidebar/SidebarHeader"
 import { NavMain } from "@/components/dashboard/sidebar/NavMain"
 import { NavUser } from "@/components/dashboard/sidebar/NavUser"
-import { TeamSwitcher } from "@/components/dashboard/sidebar/TeamSwitcher"
 import { SidebarCard } from "@/components/dashboard/sidebar/SidebarCard"
 
 // 사이드바 데이터
@@ -17,119 +17,191 @@ const data = {
   user: {
     name: "Nathan Scott",
     email: "scott@example.com",
-    avatar: "",
+    avatar: "https://github.com/maxleiter.png",
   },
-  // 상단 팀 데이터
-  teams: [
-    {
-      name: "Quantico",
-      logo: Blocks,
-      plan: "ID: CMP-1006",
-    },
-  ],
   // 메인 네비게이션
   navMain: [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: House,
     },
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: LayoutDashboard,
       items: [
         {
           title: "Analytics",
-          url: "#",
+          url: "/dashboard/analytics",
         },
         {
           title: "Sales Overview",
-          url: "#",
+          url: "/dashboard/sales-overview",
         },
         {
           title: "Top Products",
-          url: "#",
+          url: "/dashboard/top-products",
         },
         {
           title: "Stock Status",
-          url: "#",
+          url: "/dashboard/stock-status",
         },
       ],
     },
     {
       title: "Analytics",
-      url: "#",
+      url: "/analytics",
       icon: BarChart3,
+      items: [
+        {
+          title: "Overview",
+          url: "/analytics/overview",
+        },
+        {
+          title: "Reports",
+          url: "/analytics/reports",
+        },
+        {
+          title: "Performance",
+          url: "/analytics/performance",
+        },
+      ],
     },
     {
       title: "Products",
-      url: "#",
+      url: "/products",
       icon: Package,
+      items: [
+        {
+          title: "All Products",
+          url: "/products/all",
+        },
+        {
+          title: "Inventory",
+          url: "/products/inventory",
+        },
+        {
+          title: "Add Product",
+          url: "/products/add",
+        },
+      ],
     },
     {
       title: "Categories",
-      url: "#",
+      url: "/categories",
       icon: Tags,
+      items: [
+        {
+          title: "All Categories",
+          url: "/categories/all",
+        },
+        {
+          title: "Add Category",
+          url: "/categories/add",
+        },
+      ],
     },
     {
       title: "Orders",
-      url: "#",
+      url: "/orders",
       icon: ShoppingCart,
+      items: [
+        {
+          title: "All Orders",
+          url: "/orders/all",
+        },
+        {
+          title: "Pending",
+          url: "/orders/pending",
+        },
+        {
+          title: "Completed",
+          url: "/orders/completed",
+        },
+      ],
     },
     {
       title: "Taxes",
-      url: "#",
+      url: "/taxes",
       icon: ReceiptText,
+      items: [
+        {
+          title: "Tax Overview",
+          url: "/taxes/overview",
+        },
+        {
+          title: "Tax Rates",
+          url: "/taxes/rates",
+        },
+      ],
     },
     {
       title: "Customers",
-      url: "#",
+      url: "/customers",
       icon: Users,
+      items: [
+        {
+          title: "All Customers",
+          url: "/customers/all",
+        },
+        {
+          title: "Customer Groups",
+          url: "/customers/groups",
+        },
+      ],
     },
     {
       title: "Reviews",
-      url: "#",
+      url: "/reviews",
       icon: Star,
+      items: [
+        {
+          title: "All Reviews",
+          url: "/reviews/all",
+        },
+        {
+          title: "Pending Reviews",
+          url: "/reviews/pending",
+        },
+      ],
     },
     {
       title: "Payments",
-      url: "#",
+      url: "/payments",
       icon: CreditCard,
+      items: [
+        {
+          title: "Transactions",
+          url: "/payments/transactions",
+        },
+        {
+          title: "Payment Methods",
+          url: "/payments/methods",
+        },
+      ],
     },
-  ],
+  ]
 }
 
+// collapsible="icon" : 사이드바를 접었을 때 메뉴 아이콘만 표시
 export default function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      {/* 사이드바 헤더 */}
       <SidebarHeader>
-        <div className="flex items-center group-data-[collapsible=icon]:flex-col">
-          <div className="min-w-0 flex-1 group-data-[collapsible=icon]:flex-none">
-            <TeamSwitcher teams={data.teams} />
-          </div>
-          {/* 검색 및 사이드바 여닫기 */}
-          <div className="flex items-center group-data-[collapsible=icon]:flex-col">
-            <button
-              type="button"
-              className="flex size-8 items-center justify-center text-muted-foreground hover:text-foreground group-data-[collapsible=icon]:hidden"
-            >
-              <Search className="size-4" />
-            </button>
-            <SidebarTrigger className="size-8 text-muted-foreground hover:text-foreground" />
-          </div>
-        </div>
+        {/* 사이드바 헤더 */}
+        <AppSidebarHeader />
       </SidebarHeader>
 
-      {/* 사이드바 메뉴 */}
       <SidebarContent>
+        {/* 사이드바 메뉴 */}
         <NavMain items={data.navMain} />
       </SidebarContent>
 
-      {/* 사이드바 푸터 */}
-      <SidebarFooter>
+      <SidebarFooter className="gap-4">
+        {/* 팝업 카드 */}
         <SidebarCard />
+        {/* 유저 프로필 */}
         <NavUser user={data.user} />
       </SidebarFooter>
       {/* 사이드바 여닫이 */}

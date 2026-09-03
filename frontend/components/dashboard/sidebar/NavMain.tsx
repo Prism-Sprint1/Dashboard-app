@@ -28,10 +28,11 @@ export function NavMain({
   const [openItem, setOpenItem] = useState("Dashboard")
 
   // 상위 메뉴 클릭 시 선택 및 하위 메뉴 상태 변경
+  // typeof를 사용해 items 배열의 요소 타입 가져오기
   const handleItemClick = (item: (typeof items)[number]) => {
     setActiveItem(item.title)
 
-    // 하위 메뉴가 존재할 경우
+    // ?. : 하위 메뉴가 존재하는 경우에만 length 확인
     if (item.items?.length) {
       setOpenItem(item.title)
       setActiveSubItem(item.items[0].title)

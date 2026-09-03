@@ -16,11 +16,10 @@ export function TeamSwitcher({
   }[]
 }) {
   const { isMobile } = useSidebar()
+  // 첫 번째 팀을 기본 선택 상태로 설정
   const [activeTeam, setActiveTeam] = React.useState(teams[0])
-
-  if (!activeTeam) {
-    return null
-  }
+  // 선택 가능한 팀이 없는 경우 컴포넌트 숨김
+  if (!activeTeam) return null
 
   return (
     <SidebarMenu>
