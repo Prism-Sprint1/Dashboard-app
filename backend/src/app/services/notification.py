@@ -4,6 +4,36 @@ from sqlalchemy.orm import Session, joinedload
 
 from ..models.notification import Notification
 from ..models.users import Users
+from ..schemas.notification import TransactionRow
+
+
+def _to_transaction_row(n: Notification) -> TransactionRow:
+    product = n.product
+    detail = " · ".join(part for part in (product.option, product.color) if part)
+    initials = "".join(word[0] for word in n.customer.split()[:2]).upper()
+    return TransactionRow(
+        id=n.id,
+        product=product.name,
+        detail=detail,
+        price=f"{n.price:.2f}",
+        customer=n.customer,
+        initials=initials or "?",
+        date=n.date.strftime("%d %b %Y, %I:%M %p"),
+        method=n.method,
+        card=n.card,
+        email=n.email,
+        image=product.image or "",
+    )
+
+
+def list_transactions(db: Session) -> list[TransactionRow]:
+    """Recent Transaction 테이블용 - 전체 거래 내역을 최신순으로 조회."""
+    stmt = (
+        select(Notification)
+        .options(joinedload(Notification.product))
+        .order_by(Notification.date.desc())
+    )
+    return [_to_transaction_row(n) for n in db.scalars(stmt).all()]
 
 
 def get_user_purchases(db: Session, user_id: str) -> list[Notification]:

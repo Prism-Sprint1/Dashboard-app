@@ -1,5 +1,7 @@
 // FastAPI 백엔드 (Supabase Postgres 연결) 호출 클라이언트
 
+import type { Transaction } from "@/lib/types"
+
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000"
 
@@ -97,4 +99,7 @@ export const api = {
     request<{ user_id: string; count: number; items: NotificationItem[] }>(
       `/notification/${userId}`
     ),
+
+  // Recent Transaction 테이블용 - 전체 거래 내역
+  getTransactions: () => request<Transaction[]>("/notification"),
 }

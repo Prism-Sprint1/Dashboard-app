@@ -21,7 +21,8 @@ import {
   TableRow,
 } from "@/components/ui"
 
-import { data } from "@/lib/mockData"
+import { api } from "@/lib/api"
+import type { Transaction } from "@/lib/types"
 import { exportToCsv } from "@/lib/exportCsv"
 import { exportToPdf } from "@/lib/exportPdf"
 import { tableColumns } from "./table.constants"
@@ -33,7 +34,34 @@ const columns = tableColumns
 export default function OrderTable() {
   const [selected, setSelected] = React.useState<string[]>([])
   const [query, setQuery] = React.useState("")
-  const visibleTransactions = data.transactions.filter((transaction) =>
+  const [transactions, setTransactions] = React.useState<Transaction[]>([])
+  const [status, setStatus] = React.useState<"loading" | "ready" | "error">(
+    "loading"
+  )
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    let cancelled = false
+    api
+      .getTransactions()
+      .then((rows) => {
+        if (cancelled) return
+        setTransactions(rows)
+        setStatus("ready")
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return
+        setErrorMessage(
+          err instanceof Error ? err.message : "데이터를 불러오지 못했습니다."
+        )
+        setStatus("error")
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const visibleTransactions = transactions.filter((transaction) =>
     `${transaction.id} ${transaction.product} ${transaction.customer} ${transaction.email}`
       .toLowerCase()
       .includes(query.toLowerCase())
@@ -102,7 +130,7 @@ export default function OrderTable() {
           <h1 className="flex items-center gap-2 text-xl font-semibold tracking-[-0.02em]">
             Recent Transaction
             <span className="min-w-5 rounded-lg bg-neutral-800 px-1 text-center text-sm font-normal text-neutral-500">
-              {data.transactions.length}
+              {transactions.length}
             </span>
           </h1>
         </div>
@@ -276,7 +304,17 @@ export default function OrderTable() {
           </ShadcnTable>
         </div>
       </div>
-      {visibleTransactions.length === 0 && (
+      {status === "loading" && (
+        <p className="py-12 text-center text-sm text-[#aaa]">
+          Loading transactions…
+        </p>
+      )}
+      {status === "error" && (
+        <p className="py-12 text-center text-sm text-red-400">
+          {errorMessage ?? "Failed to load transactions."}
+        </p>
+      )}
+      {status === "ready" && visibleTransactions.length === 0 && (
         <p className="py-12 text-center text-sm text-[#aaa]">
           No transactions found.
         </p>

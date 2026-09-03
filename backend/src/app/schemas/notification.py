@@ -39,3 +39,19 @@ class NotificationListResponse(BaseModel):
     user_id: str
     count: int
     items: list[NotificationItem]
+
+
+class TransactionRow(BaseModel):
+    """프론트엔드 Recent Transaction 테이블 행."""
+
+    id: str
+    product: str
+    detail: str
+    price: str
+    customer: str
+    initials: str
+    date: str
+    method: MethodEnum
+    card: str
+    email: EmailStr
+    image: str
