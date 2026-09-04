@@ -19,7 +19,7 @@ import { TrendingUp } from "lucide-react"
 
 // 시안 이미지 실제 데이터 매칭
 
-import { data } from "@/lib/mockData"
+import { barChartData } from "@/lib/mockData"
 
 const chartConfig = {
   paid: { label: "Paid product", color: "#2563eb" },
@@ -92,7 +92,7 @@ export default function BarChart() {
             className="aspect-[2.2/1] max-h-70 w-full"
           >
             <BarChartIcon
-              data={data.chartData}
+              data={barChartData.chartData}
               margin={{ left: -25, right: 10 }}
               barGap={3}
               // 마우스 무빙 시 현재 호버된 '달의 이름'을 상태에 즉시 동기화합니다
@@ -100,7 +100,7 @@ export default function BarChart() {
                 if (state && state.activeLabel) {
                   setActiveMonth(state.activeLabel)
 
-                  const currentData = data.chartData.find(
+                  const currentData = barChartData.chartData.find(
                     (d) => d.month === state.activeLabel
                   )
                   if (currentData) {
@@ -138,7 +138,7 @@ export default function BarChart() {
 
               {/* Paid product 막대 (파란색) */}
               <Bar dataKey="paid" maxBarSize={22}>
-                {data.chartData.map((entry, index) => (
+                {barChartData.chartData.map((entry, index) => (
                   <Cell
                     key={`cell-paid-${index}`}
                     fill={entry.month === activeMonth ? "#2563eb" : "#222530"}
@@ -150,7 +150,7 @@ export default function BarChart() {
 
               {/* Checkout Product 막대 (하늘색) */}
               <Bar dataKey="checkout" maxBarSize={22}>
-                {data.chartData.map((entry, index) => (
+                {barChartData.chartData.map((entry, index) => (
                   // 💡 155번째 줄 빈칸 부분 수치 [4, 4, 0, 0] 완벽 주입!
                   <Cell
                     key={`cell-checkout-${index}`}
