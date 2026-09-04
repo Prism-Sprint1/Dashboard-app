@@ -19,15 +19,7 @@ import { TrendingUp } from "lucide-react"
 
 // 시안 이미지 실제 데이터 매칭
 
-const chartData = [
-  { month: "Apr 2026", paid: 900, checkout: 1100 },
-  { month: "May 2026", paid: 1450, checkout: 1750 },
-  { month: "Jun 2026", paid: 1200, checkout: 1500 },
-  { month: "Jul 2026", paid: 890, checkout: 1300 }, // 이미지 속 포커스 타깃
-  { month: "Aug 2026", paid: 1000, checkout: 750 },
-  { month: "Sep 2026", paid: 1450, checkout: 1280 },
-  { month: "Oct 2026", paid: 1800, checkout: 1600 },
-]
+import { data } from "@/lib/mockData"
 
 const chartConfig = {
   paid: { label: "Paid product", color: "#2563eb" },
@@ -100,7 +92,7 @@ export default function BarChart() {
             className="aspect-[2.2/1] max-h-70 w-full"
           >
             <BarChartIcon
-              data={chartData}
+              data={data.chartData}
               margin={{ left: -25, right: 10 }}
               barGap={3}
               // 마우스 무빙 시 현재 호버된 '달의 이름'을 상태에 즉시 동기화합니다
@@ -108,7 +100,7 @@ export default function BarChart() {
                 if (state && state.activeLabel) {
                   setActiveMonth(state.activeLabel)
 
-                  const currentData = chartData.find(
+                  const currentData = data.chartData.find(
                     (d) => d.month === state.activeLabel
                   )
                   if (currentData) {
@@ -146,7 +138,7 @@ export default function BarChart() {
 
               {/* Paid product 막대 (파란색) */}
               <Bar dataKey="paid" maxBarSize={22}>
-                {chartData.map((entry, index) => (
+                {data.chartData.map((entry, index) => (
                   <Cell
                     key={`cell-paid-${index}`}
                     fill={entry.month === activeMonth ? "#2563eb" : "#222530"}
@@ -158,7 +150,7 @@ export default function BarChart() {
 
               {/* Checkout Product 막대 (하늘색) */}
               <Bar dataKey="checkout" maxBarSize={22}>
-                {chartData.map((entry, index) => (
+                {data.chartData.map((entry, index) => (
                   // 💡 155번째 줄 빈칸 부분 수치 [4, 4, 0, 0] 완벽 주입!
                   <Cell
                     key={`cell-checkout-${index}`}

@@ -1,4 +1,14 @@
 export const data = {
+  chartData: [
+    { month: "Apr 2026", paid: 900, checkout: 1100 },
+    { month: "May 2026", paid: 1450, checkout: 1750 },
+    { month: "Jun 2026", paid: 1200, checkout: 1500 },
+    { month: "Jul 2026", paid: 890, checkout: 1300 }, // 이미지 속 포커스 타깃
+    { month: "Aug 2026", paid: 1000, checkout: 750 },
+    { month: "Sep 2026", paid: 1450, checkout: 1280 },
+    { month: "Oct 2026", paid: 1800, checkout: 1600 },
+  ],
+
   transactions: [
     {
       id: "AR-47380416-61",
