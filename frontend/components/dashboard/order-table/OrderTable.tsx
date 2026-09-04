@@ -2,54 +2,66 @@
 
 import * as React from "react"
 
-import {
-  CalendarDays,
-  CreditCard,
-  Download,
-  EyeOff,
-  Hash,
-  Mail,
-  Search,
-  SlidersHorizontal,
-  UserRound,
-  X,
-} from "lucide-react"
+import { Download, EyeOff, Search, X, SlidersHorizontal } from "lucide-react"
 
 import Image from "next/image"
 
-import { Button } from "@/components/ui/button"
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
+  Input,
   Table as ShadcnTable,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui"
 
-import { data } from "@/lib/mockData"
+import { api } from "@/lib/api"
+import type { Transaction } from "@/lib/types"
+import { exportToCsv } from "@/lib/exportCsv"
+import { exportToPdf } from "@/lib/exportPdf"
+import { tableColumns } from "./table.constants"
 
-const columns = [
-  [Hash, "ORDER ID"],
-  [SlidersHorizontal, "PRODUCT ITEM"],
-  [CreditCard, "PRICE"],
-  [UserRound, "CUSTOMER"],
-  [CalendarDays, "DATE CHECKOUT"],
-  [CreditCard, "PAYMENT METHOD"],
-  [Mail, "EMAIL"],
-] as const
+import defaultImage from "@/public/product-placeholder.svg"
+
+const columns = tableColumns
 
 export default function OrderTable() {
   const [selected, setSelected] = React.useState<string[]>([])
   const [query, setQuery] = React.useState("")
-  const visibleTransactions = data.transactions.filter((transaction) =>
+  const [transactions, setTransactions] = React.useState<Transaction[]>([])
+  const [status, setStatus] = React.useState<"loading" | "ready" | "error">(
+    "loading"
+  )
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    let cancelled = false
+    api
+      .getTransactions()
+      .then((rows) => {
+        if (cancelled) return
+        setTransactions(rows)
+        setStatus("ready")
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return
+        setErrorMessage(
+          err instanceof Error ? err.message : "데이터를 불러오지 못했습니다."
+        )
+        setStatus("error")
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const visibleTransactions = transactions.filter((transaction) =>
     `${transaction.id} ${transaction.product} ${transaction.customer} ${transaction.email}`
       .toLowerCase()
       .includes(query.toLowerCase())
@@ -80,19 +92,47 @@ export default function OrderTable() {
           ]
     )
 
+  const handleExportCsv = () => {
+    // 선택된 행이 있으면 선택된 것만, 없으면 현재 검색 필터가 적용된 전체를 내보냄
+    const rowsToExport =
+      selected.length > 0
+        ? visibleTransactions.filter((t) => selected.includes(t.id))
+        : visibleTransactions
+
+    const csvRows = rowsToExport.map((t) => ({
+      "Order ID": t.id,
+      Product: t.product,
+      Detail: t.detail,
+      Price: t.price,
+      Customer: t.customer,
+      "Date Checkout": t.date,
+      "Payment Method": t.method,
+      Card: `**** ${t.card}`,
+      Email: t.email,
+    }))
+
+    exportToCsv(csvRows, `transactions_${Date.now()}.csv`)
+  }
+
+  const handlerExportPdf = () => {
+    const rowsToExport =
+      selected.length > 0
+        ? visibleTransactions.filter((t) => selected.includes(t.id))
+        : visibleTransactions
+
+    exportToPdf(rowsToExport, `transactions_${Date.now()}.pdf`)
+  }
+
   return (
     <section className="border-bd-black w-full rounded-2xl border p-4 shadow-[0_12px_40px_rgba(25,28,27,0.04)] md:p-6">
-      <div className="mb-6 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
+      <div className="mb-3 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
         <div>
           <h1 className="flex items-center gap-2 text-xl font-semibold tracking-[-0.02em]">
             Recent Transaction
-            <span className="min-w-5 rounded-lg bg-[#23272A] px-1 text-center text-sm font-normal text-[#696D72]">
-              {data.transactions.length}
+            <span className="min-w-5 rounded-lg bg-neutral-800 px-1 text-center text-sm font-normal text-neutral-500">
+              {transactions.length}
             </span>
           </h1>
-          <p className="mt-1 text-sm text-[#8b928d]">
-            Monitor your latest orders and payment activity.
-          </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative w-full sm:w-56">
@@ -139,8 +179,12 @@ export default function OrderTable() {
               }
             />
             <DropdownMenuContent align="end" className="w-36">
-              <DropdownMenuItem>Export CSV</DropdownMenuItem>
-              <DropdownMenuItem>Export PDF</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleExportCsv}>
+                Export CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handlerExportPdf}>
+                Export PDF
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -198,8 +242,8 @@ export default function OrderTable() {
                       <Image
                         width={40}
                         height={40}
-                        src={transaction.image ? transaction.image : ""}
-                        alt=""
+                        src={transaction.image || defaultImage}
+                        alt={transaction.product}
                         className="size-10 rounded-lg object-cover"
                       />
                       <div>
@@ -233,11 +277,19 @@ export default function OrderTable() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span
-                        className={`text-xs font-bold italic ${transaction.method === "VISA" ? "text-[#3157a6]" : "text-[#c35a45]"}`}
-                      >
-                        {transaction.method}
-                      </span>
+                      <Image
+                        width={36}
+                        height={24}
+                        src={
+                          transaction.method === "VISA"
+                            ? "/visa.svg"
+                            : "/mastercard.svg"
+                        }
+                        alt={
+                          transaction.method === "VISA" ? "Visa" : "Mastercard"
+                        }
+                        className="h-6 w-9 rounded-[3px] object-contain"
+                      />
                       <span className="text-sm text-[#aaa]">
                         **** {transaction.card}
                       </span>
@@ -252,7 +304,17 @@ export default function OrderTable() {
           </ShadcnTable>
         </div>
       </div>
-      {visibleTransactions.length === 0 && (
+      {status === "loading" && (
+        <p className="py-12 text-center text-sm text-[#aaa]">
+          Loading transactions…
+        </p>
+      )}
+      {status === "error" && (
+        <p className="py-12 text-center text-sm text-red-400">
+          {errorMessage ?? "Failed to load transactions."}
+        </p>
+      )}
+      {status === "ready" && visibleTransactions.length === 0 && (
         <p className="py-12 text-center text-sm text-[#aaa]">
           No transactions found.
         </p>
