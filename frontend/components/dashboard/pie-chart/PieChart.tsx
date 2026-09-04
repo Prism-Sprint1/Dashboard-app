@@ -4,32 +4,19 @@ import { useState } from "react"
 import { Activity } from "lucide-react"
 import { Label, Pie, PieChart as RechartsPieChart } from "recharts"
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 const periods = ["1W", "1M", "3W", "YTD", "Total"] as const
 type Period = (typeof periods)[number]
 
-const activityKeys = [
-  "packed",
-  "processing",
-  "done",
-  "returned",
-] as const
+const activityKeys = ["packed", "processing", "done", "returned"] as const
 type ActivityKey = (typeof activityKeys)[number]
 
 const activityByPeriod = {
@@ -78,7 +65,7 @@ const chartConfig = {
     label: "Delivery Done",
     color: "#2bb7a9",
   },
- ] returned: {
+  returned: {
     label: "Returned",
     color: "#e73489",
   },
@@ -101,7 +88,7 @@ export default function PieChart() {
   }))
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0)
-\
+
   return (
     <Card
       aria-labelledby="product-activity-title"
@@ -190,18 +177,12 @@ export default function PieChart() {
               >
                 <Label
                   content={({ viewBox }) => {
-                    if (
-                      !viewBox ||
-                      !("cx" in viewBox) ||
-                      !("cy" in viewBox)
-                    ) {
+                    if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) {
                       return null
                     }
 
-                    const cx =
-                      typeof viewBox.cx === "number" ? viewBox.cx : 0
-                    const cy =
-                      typeof viewBox.cy === "number" ? viewBox.cy : 0
+                    const cx = typeof viewBox.cx === "number" ? viewBox.cx : 0
+                    const cy = typeof viewBox.cy === "number" ? viewBox.cy : 0
 
                     return (
                       <text
