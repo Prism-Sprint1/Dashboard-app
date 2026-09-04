@@ -5,12 +5,14 @@ import PieChart from "@/components/dashboard/pie-chart/PieChart"
 import BarChart from "@/components/dashboard/bar-chart/BarChart"
 import ProgressBar from "@/components/dashboard/progress-bar/ProgressBar"
 import OrderTable from "@/components/dashboard/order-table/OrderTable"
+import { DashboardNavigationProvider } from "@/components/dashboard/DashboardNavigation"
 
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
 export default function Home() {
   return (
-    <SidebarProvider>
+    <DashboardNavigationProvider>
+      <SidebarProvider>
       {/* sidebar */}
       <Sidebar />
       <SidebarInset className="m-2 rounded-xl border bg-content">
@@ -33,5 +35,6 @@ export default function Home() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+    </DashboardNavigationProvider>
   )
 }

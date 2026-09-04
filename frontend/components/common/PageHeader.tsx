@@ -1,40 +1,67 @@
+"use client"
+
 import Link from "next/link"
-import { DotIcon, House, LayoutDashboard, UserRoundPlus } from "lucide-react"
+// 실제 페이지 있을 경우 주석 해제
+// import { usePathname } from "next/navigation"
+
+import { DotIcon, House, UserRoundPlus } from "lucide-react"
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { useDashboardNavigation } from "@/components/dashboard/DashboardNavigation"
 
 export default function PageHeader() {
+  // 실제 페이지 구현 시 pathname 기준으로 메뉴 상태 동기화
+  // const pathname = usePathname()
+
+  // 현재 선택된 메뉴 상태
+  const { activeItem, activeSubItem, activeIcon: ActiveIcon } = useDashboardNavigation()
+
   return (
     <header className="p-2 border-b flex items-center justify-between">
       {/* 좌측 ui */}
-      {/* breadcrumb */}
       <Breadcrumb>
         <BreadcrumbList>
+          {/* 홈 메뉴 */}
           <BreadcrumbItem>
             <House className="w-5" />
-            <BreadcrumbLink render={<Link href="/">Home</Link>} />
+            {activeItem === "Home" ? (
+              <BreadcrumbPage>Home</BreadcrumbPage>
+            ) : (
+              <BreadcrumbLink render={<Link href="/">Home</Link>} />
+            )}
           </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <DotIcon />
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <LayoutDashboard className="w-5" />
-            <BreadcrumbLink render={<Link href="/">Dashboard</Link>} />
-          </BreadcrumbItem>
-          <BreadcrumbSeparator>
-            <DotIcon />
-          </BreadcrumbSeparator>
-          <BreadcrumbItem>
-            <BreadcrumbPage>Analytics</BreadcrumbPage>
-          </BreadcrumbItem>
+
+          {/* 상위 메뉴 */}
+          {activeItem !== "Home" && (
+            <>
+              <BreadcrumbSeparator>
+                <DotIcon />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <ActiveIcon className="w-5" />
+                <BreadcrumbLink>{activeItem}</BreadcrumbLink>
+              </BreadcrumbItem>
+            </>
+          )}
+
+          {/* 하위 메뉴 */}
+          {activeItem !== "Home" && activeSubItem && (
+            <>
+              <BreadcrumbSeparator>
+                <DotIcon />
+              </BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbPage>{activeSubItem}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </>
+          )}
         </BreadcrumbList>
       </Breadcrumb>
 
       {/* 우측 ui */}
       <div className="flex items-center gap-4">
-        {/* Avatar */}
         <AvatarGroup>
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -58,11 +85,11 @@ export default function PageHeader() {
           </AvatarGroupCount>
         </AvatarGroup>
 
-        <Button className="border">
+        <Button variant="outline" className="bg-content text-foreground">
           <UserRoundPlus />
           Invite
         </Button>
       </div>
     </header>
-  );
+  )
 }
